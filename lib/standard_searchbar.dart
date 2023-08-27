@@ -94,19 +94,14 @@ class _StandardSearchBarState extends State<StandardSearchBar> {
                     ),
                   ),
                 Expanded(
-                  child: Container(
-                    color: Colors.black,
-                    child: IntrinsicHeight(
-                      child: TextField(
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: widget.hintText,
-                          hintStyle: TextStyle(color: widget.hintColor),
-                        ),
-                        cursorColor: widget.cursorColor,
-                        style: TextStyle(color: widget.textColor),
-                      ),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: widget.hintText,
+                      hintStyle: TextStyle(color: widget.hintColor),
                     ),
+                    cursorColor: widget.cursorColor,
+                    style: TextStyle(color: widget.textColor),
                   ),
                 ),
                 if (widget.showEndIcon != false)
