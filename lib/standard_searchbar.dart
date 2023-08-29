@@ -40,31 +40,97 @@ class StandardSearchBar extends StatelessWidget {
     this.textStyle = const TextStyle(color: Colors.black),
   });
 
+  /// The width of the search bar. By default is the width of the parent (expanded).
   final double? width;
+
+  /// The height of the search bar. By default is 50.
   final double height;
+
+  /// The border radius of the search bar. By default is 25 (rounded), but it can be
+  /// any value.
   final double borderRadius;
+
+  /// The background color of the search bar. By default is white.
   final Color backgroundColor;
+
+  /// The hint text of the SearchBar. By default is 'Search'.
   final String hintText;
+
+  /// The hint text style of the SearchBar. By default is grey.
   final TextStyle hintStyle;
+
+  /// The start icon of the SearchBar. By default is Icons.search.
   final IconData startIcon;
+
+  /// The color of the start icon. By default is grey.
   final Color startIconColor;
+
+  /// The end icon of the SearchBar. By default is Icons.mic.
   final IconData endIcon;
+
+  /// The color of the end icon. By default is grey.
   final Color endIconColor;
+
+  /// Whether to show the start icon or not. By default is true. If false, the
+  /// start icon will not be shown and the icon padding will be removed.
   final bool showStartIcon;
+
+  /// Whether to show the end icon or not. By default is false. If true, the
+  /// end icon will be shown and the icon padding will be removed.
   final bool showEndIcon;
+
+  /// The color of the cursor. By default is grey.
   final Color cursorColor;
+
+  /// The splash color of the start icon. The splash color is the color that
+  /// appears when the icon is tapped. By default is null, because it is calculated
+  /// automatically by the Material widget.
   final Color? startIconSplashColor;
+
+  /// The function callback of the startIcon. If it is not null, the end icon will
+  /// be clickable and the splash color will be shown. By default is null.
   final Function()? startIconOnTap;
+
+  /// The function callback of the endIcon. If it is not null, the end icon will
+  /// be clickable and the splash color will be shown. By default is null.
   final Function()? endIconOnTap;
+
+  /// The splash color of the end icon. The splash color is the color that
+  /// appears when the icon is tapped. By default is null, because it is calculated
+  /// automatically by the Material widget.
   final Color? endIconSplashColor;
+
+  /// The size of the start icon. By default is 20.
   final double startIconSize;
+
+  /// The size of the end icon. By default is 20.
   final double endIconSize;
+
+  /// The horizontal padding of the search bar. By default is 10.
   final double horizontalPadding;
+
+  /// The right padding of the start icon. By default is 8.
   final double startIconPaddingRight;
+
+  /// The left padding of the end icon. By default is 8.
   final double endIconPaddingLeft;
+
+  /// The function callback of the TextField onSubmitted. By default is null.
+  /// This function can be used to search the text with the given value. This
+  /// function is called when the user presses the enter key.
   final Function(String)? onSubmitted;
+
+  /// The function callback of the TextField onChanged. By default is null.
+  /// This function is executed every time the text changes. So it can be
+  /// execute a search every time the user types a letter or it can be used
+  /// to update the search suggestions.
   final Function(String)? onChanged;
+
+  /// The shadow of the search bar. By default is a little black shadow. It
+  /// can be any value. A list of BoxShadow.
   final List<BoxShadow> shadow;
+
+  /// The text style of the TextField. By default the text color is black.
   final TextStyle textStyle;
 
   @override
@@ -105,9 +171,8 @@ class StandardSearchBar extends StatelessWidget {
                 ),
               Expanded(
                 child: Padding(
-                  padding: showEndIcon
-                      ? EdgeInsets.zero
-                      : EdgeInsets.only(right: endIconPaddingLeft),
+                  padding:
+                      showEndIcon ? EdgeInsets.zero : EdgeInsets.only(right: endIconPaddingLeft),
                   child: TextField(
                     decoration: InputDecoration(
                       border: InputBorder.none,
