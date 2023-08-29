@@ -18,11 +18,10 @@ class MyApp extends StatelessWidget {
         ),
         body: Center(
           child: StandardSearchBar(
-            width: MediaQuery.of(context).size.width * 0.9,
-            startIconOnTap: () {
-              if (kDebugMode) print('Search!');
+            onChanged: (value) {
+              if (kDebugMode) print('Search: $value');
             },
-            onSearch: (String value) {
+            onSubmitted: (value) {
               if (kDebugMode) print('Search: $value');
             },
           ),

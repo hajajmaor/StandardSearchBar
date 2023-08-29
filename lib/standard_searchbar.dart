@@ -10,7 +10,7 @@ class StandardSearchBar extends StatelessWidget {
     this.borderRadius = 25,
     this.backgroundColor = Colors.white,
     this.hintText = 'Search',
-    this.hintColor = Colors.grey,
+    this.hintStyle = const TextStyle(color: Colors.grey),
     this.startIcon = Icons.search,
     this.startIconColor = Colors.grey,
     this.endIcon = Icons.mic,
@@ -18,7 +18,6 @@ class StandardSearchBar extends StatelessWidget {
     this.showStartIcon = true,
     this.showEndIcon = false,
     this.cursorColor = Colors.grey,
-    this.textColor = Colors.black,
     this.startIconSplashColor,
     this.startIconOnTap,
     this.endIconOnTap,
@@ -28,7 +27,8 @@ class StandardSearchBar extends StatelessWidget {
     this.horizontalPadding = 10,
     this.startIconPaddingRight = 8,
     this.endIconPaddingLeft = 8,
-    this.onSearch,
+    this.onSubmitted,
+    this.onChanged,
     this.shadow = const [
       BoxShadow(
         color: Colors.black12,
@@ -37,6 +37,7 @@ class StandardSearchBar extends StatelessWidget {
         offset: Offset(0, 3),
       ),
     ],
+    this.textStyle = const TextStyle(color: Colors.black),
   });
 
   final double? width;
@@ -44,7 +45,7 @@ class StandardSearchBar extends StatelessWidget {
   final double borderRadius;
   final Color backgroundColor;
   final String hintText;
-  final Color hintColor;
+  final TextStyle hintStyle;
   final IconData startIcon;
   final Color startIconColor;
   final IconData endIcon;
@@ -52,7 +53,6 @@ class StandardSearchBar extends StatelessWidget {
   final bool showStartIcon;
   final bool showEndIcon;
   final Color cursorColor;
-  final Color textColor;
   final Color? startIconSplashColor;
   final Function()? startIconOnTap;
   final Function()? endIconOnTap;
@@ -62,8 +62,10 @@ class StandardSearchBar extends StatelessWidget {
   final double horizontalPadding;
   final double startIconPaddingRight;
   final double endIconPaddingLeft;
-  final Function(String)? onSearch;
+  final Function(String)? onSubmitted;
+  final Function(String)? onChanged;
   final List<BoxShadow> shadow;
+  final TextStyle textStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -109,11 +111,12 @@ class StandardSearchBar extends StatelessWidget {
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       hintText: hintText,
-                      hintStyle: TextStyle(color: hintColor),
+                      hintStyle: hintStyle,
                     ),
                     cursorColor: cursorColor,
-                    style: TextStyle(color: textColor),
-                    onSubmitted: onSearch,
+                    style: textStyle,
+                    onSubmitted: onSubmitted,
+                    onChanged: onChanged,
                   ),
                 ),
               ),

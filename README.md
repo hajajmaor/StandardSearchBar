@@ -1,39 +1,70 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# Standard SearchBar
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages).
+<!-- [![Pub Version](https://img.shields.io/pub/v/easy_search_bar.svg)](https://pub.dev/packages/easy_search_bar) -->
+<!-- [![GitHub](https://img.shields.io/github/license/ManelRosPuig/StandardSearchBar)](https://github.com/ManelRosPuig/StandardSearchBar/blob/main/LICENSE) -->
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages).
--->
-
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+A simple and customizable search bar widget for Flutter.
 
 ## Features
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+- Implement a search bar with ease.
+- Customize the search bar's appearance:
+  - Change the search icon.
+  - Adjust size and color.
+  - Personalize placeholder text.
 
-## Getting started
+## Installation
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+Add the following line to your `pubspec.yaml` file:
+
+```yaml
+dependencies:
+  easy_search_bar: ^1.0.0
+```
+
+Then, run flutter pub get to install the package.
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
+Import the package:
 
 ```dart
-const like = 'sample';
+import 'package:standard_searchbar/standard_searchbar.dart';
 ```
 
-## Additional information
+Create a `StandardSearchBar` widget:
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+```dart
+StandardSearchBar(
+  onChanged: (value) {
+    // Handle search input change
+  },
+  onSubmitted: (value) {
+    // Handle search submission
+  },
+),
+```
+
+## Examples
+
+```dart
+StandardSearchBar(
+  width: MediaQuery.of(context).size.width * 0.9,
+  backgroundColor: const Color(0xFF35404D),
+  hintText: 'Search Packages',
+  cursorColor: Colors.white,
+  hintStyle: const TextStyle(color: Color(0xFF8d9399)),
+  startIconSize: 16,
+  startIconPaddingRight: 0,
+  startIconColor: const Color(0xFF848B92),
+  textStyle: const TextStyle(color: Colors.white),
+),
+```
+
+## Contributing
+
+Contributions are welcome! Please fork the repository and open a pull request with your changes.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
