@@ -2,7 +2,7 @@ library standard_searchbar;
 
 import 'package:flutter/material.dart';
 
-class StandardSearchBar extends StatefulWidget {
+class StandardSearchBar extends StatelessWidget {
   const StandardSearchBar({
     super.key,
     this.width,
@@ -16,11 +16,27 @@ class StandardSearchBar extends StatefulWidget {
     this.endIcon = Icons.mic,
     this.endIconColor = Colors.grey,
     this.showStartIcon = true,
-    this.showEndIcon = true,
+    this.showEndIcon = false,
     this.cursorColor = Colors.grey,
     this.textColor = Colors.black,
     this.startIconSplashColor,
     this.startIconOnTap,
+    this.endIconOnTap,
+    this.endIconSplashColor,
+    this.startIconSize = 20,
+    this.endIconSize = 20,
+    this.horizontalPadding = 10,
+    this.startIconPaddingRight = 8,
+    this.endIconPaddingLeft = 8,
+    this.onSearch,
+    this.shadow = const [
+      BoxShadow(
+        color: Colors.black12,
+        spreadRadius: 0,
+        blurRadius: 5,
+        offset: Offset(0, 3),
+      ),
+    ],
   });
 
   final double? width;
@@ -39,111 +55,93 @@ class StandardSearchBar extends StatefulWidget {
   final Color textColor;
   final Color? startIconSplashColor;
   final Function()? startIconOnTap;
-
-  @override
-  State<StandardSearchBar> createState() => _StandardSearchBarState();
-}
-
-class _StandardSearchBarState extends State<StandardSearchBar> {
-  final padding = 8.0;
-  OverlayEntry? entry;
-  final layerLink = LayerLink();
-
-  String mutableProperty = 'Initial Value';
-
-  void updateProperty() {
-    setState(() {
-      mutableProperty = 'New Value';
-    });
-  }
+  final Function()? endIconOnTap;
+  final Color? endIconSplashColor;
+  final double startIconSize;
+  final double endIconSize;
+  final double horizontalPadding;
+  final double startIconPaddingRight;
+  final double endIconPaddingLeft;
+  final Function(String)? onSearch;
+  final List<BoxShadow> shadow;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {},
-      child: CompositedTransformTarget(
-        link: layerLink,
-        child: Container(
-          width: widget.width,
-          decoration: BoxDecoration(
-            color: widget.backgroundColor,
-            borderRadius: BorderRadius.circular(widget.borderRadius),
-          ),
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: padding),
-            child: Row(
-              children: [
-                if (widget.showStartIcon != false)
-                  Padding(
-                    padding: EdgeInsets.only(right: padding),
-                    child: ClipOval(
-                      child: Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          splashColor: widget.startIconSplashColor,
-                          onTap: widget.startIconOnTap,
-                          child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Icon(
-                              widget.startIcon,
-                              color: widget.startIconColor,
-                            ),
+      child: Container(
+        width: width,
+        decoration: BoxDecoration(
+          color: backgroundColor,
+          borderRadius: BorderRadius.circular(borderRadius),
+          boxShadow: shadow,
+        ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+          child: Row(
+            children: [
+              if (showStartIcon != false)
+                Padding(
+                  padding: EdgeInsets.only(right: startIconPaddingRight),
+                  child: ClipOval(
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        splashColor: startIconSplashColor,
+                        onTap: startIconOnTap,
+                        child: Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Icon(
+                            startIcon,
+                            color: startIconColor,
+                            size: startIconSize,
                           ),
                         ),
                       ),
                     ),
                   ),
-                Expanded(
+                ),
+              Expanded(
+                child: Padding(
+                  padding:
+                      showEndIcon ? EdgeInsets.zero : EdgeInsets.only(right: endIconPaddingLeft),
                   child: TextField(
                     decoration: InputDecoration(
                       border: InputBorder.none,
-                      hintText: widget.hintText,
-                      hintStyle: TextStyle(color: widget.hintColor),
+                      hintText: hintText,
+                      hintStyle: TextStyle(color: hintColor),
                     ),
-                    cursorColor: widget.cursorColor,
-                    style: TextStyle(color: widget.textColor),
+                    cursorColor: cursorColor,
+                    style: TextStyle(color: textColor),
+                    onSubmitted: onSearch,
                   ),
                 ),
-                if (widget.showEndIcon != false)
-                  Padding(
-                    padding: EdgeInsets.only(left: padding),
-                    child: Icon(widget.endIcon, color: widget.endIconColor),
+              ),
+              if (showEndIcon != false)
+                Padding(
+                  padding: EdgeInsets.only(left: endIconPaddingLeft),
+                  child: ClipOval(
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        splashColor: endIconSplashColor,
+                        onTap: endIconOnTap,
+                        child: Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Icon(
+                            endIcon,
+                            color: endIconColor,
+                            size: endIconSize,
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
-              ],
-            ),
+                ),
+            ],
           ),
         ),
       ),
-    );
-  }
-
-  void showOverlay() {
-    final overlay = Overlay.of(context);
-    final renderBox = context.findRenderObject() as RenderBox;
-    final size = renderBox.size;
-    final offset = renderBox.localToGlobal(Offset.zero);
-
-    entry = OverlayEntry(
-      builder: (context) => Positioned(
-        left: offset.dx,
-        top: offset.dy + size.height + 16,
-        width: size.width,
-        child: CompositedTransformFollower(
-          link: layerLink,
-          showWhenUnlinked: false,
-          offset: Offset(0, size.height),
-          child: buildOverlay(),
-        ),
-      ),
-    );
-
-    overlay.insert(entry!);
-  }
-
-  Widget buildOverlay() {
-    return Container(
-      height: 250,
-      color: widget.backgroundColor,
     );
   }
 }
