@@ -5,6 +5,8 @@
 
 A simple and very customizable search bar widget for Flutter.
 
+[Default Example](https://raw.githubusercontent.com/ManelRosPuig/StandardSearchBar/main/images/Screenshot1.png)
+
 ## Features
 
 - Implement a search bar with ease.
