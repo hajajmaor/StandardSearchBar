@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.0.1] - Initial Release
+## [1.0.2] - Initial Release
 ### Added
 - Implemented a simple and customizable search bar widget.
 - Basic functionality to search within a data source.

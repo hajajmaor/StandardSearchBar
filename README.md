@@ -5,7 +5,13 @@
 
 A simple and very customizable search bar widget for Flutter.
 
-[Default Example](https://raw.githubusercontent.com/ManelRosPuig/StandardSearchBar/main/images/Screenshot1.png)
+[Default Example]()
+
+<table>
+  <tr>
+    <td><img src="https://raw.githubusercontent.com/ManelRosPuig/StandardSearchBar/main/images/Screenshot1.png"></td>
+  </tr>
+</table>
 
 ## Features
 
