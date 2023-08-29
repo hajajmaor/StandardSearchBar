@@ -3,7 +3,7 @@
 <!-- [![Pub Version](https://img.shields.io/pub/v/easy_search_bar.svg)](https://pub.dev/packages/easy_search_bar) -->
 <!-- [![GitHub](https://img.shields.io/github/license/ManelRosPuig/StandardSearchBar)](https://github.com/ManelRosPuig/StandardSearchBar/blob/main/LICENSE) -->
 
-A simple and customizable search bar widget for Flutter.
+A simple and very customizable search bar widget for Flutter.
 
 ## Features
 
