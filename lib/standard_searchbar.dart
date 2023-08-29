@@ -105,8 +105,9 @@ class StandardSearchBar extends StatelessWidget {
                 ),
               Expanded(
                 child: Padding(
-                  padding:
-                      showEndIcon ? EdgeInsets.zero : EdgeInsets.only(right: endIconPaddingLeft),
+                  padding: showEndIcon
+                      ? EdgeInsets.zero
+                      : EdgeInsets.only(right: endIconPaddingLeft),
                   child: TextField(
                     decoration: InputDecoration(
                       border: InputBorder.none,
