@@ -19,7 +19,7 @@ Add the following line to your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  easy_search_bar: ^1.0.0
+  standard_searchbar: ^1.0.0
 ```
 
 Then, run flutter pub get to install the package.

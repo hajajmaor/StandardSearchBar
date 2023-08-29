@@ -18,6 +18,7 @@ class MyApp extends StatelessWidget {
         ),
         body: Center(
           child: StandardSearchBar(
+            width: 500,
             onChanged: (value) {
               if (kDebugMode) print('Search: $value');
             },
