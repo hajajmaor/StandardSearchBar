@@ -3,7 +3,7 @@
 A simple and very customizable search bar widget for Flutter.
 
 <table>
-  <tr><img src="https://raw.githubusercontent.com/ManelRosPuig/StandardSearchBar/main/images/1.png"></tr>
+  <tr><img src="https://raw.githubusercontent.com/ManelRosPuig/StandardSearchBar/main/images/StandardSearchBarExample1.gif"></tr>
   <tr><img src="https://raw.githubusercontent.com/ManelRosPuig/StandardSearchBar/main/images/2.png"></tr>
   <tr><img src="https://raw.githubusercontent.com/ManelRosPuig/StandardSearchBar/main/images/3.png"></tr>
   <tr><img src="https://raw.githubusercontent.com/ManelRosPuig/StandardSearchBar/main/images/4.png"></tr>
