@@ -13,6 +13,7 @@ class StandardTextField extends StatelessWidget {
     this.onSubmitted,
     this.onChanged,
     required this.horizontalPadding,
+    required this.updateSuggestions,
   });
 
   final bool showEndIcon;
@@ -25,6 +26,7 @@ class StandardTextField extends StatelessWidget {
   final void Function(String)? onSubmitted;
   final void Function(String)? onChanged;
   final double horizontalPadding;
+  final Function(String) updateSuggestions;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +47,10 @@ class StandardTextField extends StatelessWidget {
         style: textStyle,
         onSubmitted: onSubmitted,
         onChanged: (value) {
-          if (onChanged != null) onChanged!(value);
+          updateSuggestions(value);
+          if (onChanged != null) {
+            onChanged!(value);
+          }
         },
       ),
     );

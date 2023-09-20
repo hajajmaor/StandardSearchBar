@@ -11,6 +11,8 @@ class StandardSearchbarRegion extends StatefulWidget {
     this.suggestions,
     required this.borderRadius,
     required this.backgroundColor,
+    required this.onSuggestionSelected,
+    required this.rebuild,
     required this.child,
   });
 
@@ -20,6 +22,8 @@ class StandardSearchbarRegion extends StatefulWidget {
   final List<String>? suggestions;
   final double borderRadius;
   final Color backgroundColor;
+  final Function(String) onSuggestionSelected;
+  final bool rebuild;
   final Widget child;
 
   @override
@@ -29,20 +33,21 @@ class StandardSearchbarRegion extends StatefulWidget {
 class _SearchbarRegionState extends State<StandardSearchbarRegion> {
   OverlayEntry? entry;
   final layerLink = LayerLink();
+  final unfocus = [false, false];
 
   @override
   Widget build(BuildContext context) {
     return TapRegion(
       onTapInside: (e) {
+        unfocus[1] = false;
         widget.focus();
         if (widget.suggestions == null) return;
         if (widget.isSearchBarFocused) return;
         showOverlay();
       },
       onTapOutside: (e) {
-        widget.unfocus();
-        if (widget.suggestions == null) return;
-        entry?.remove();
+        unfocus[1] = true;
+        requestUnFocus(1);
       },
       child: CompositedTransformTarget(
         link: layerLink,
@@ -52,6 +57,8 @@ class _SearchbarRegionState extends State<StandardSearchbarRegion> {
   }
 
   void showOverlay() {
+    if (widget.suggestions == null) return;
+
     final overlay = Overlay.of(context);
     final renderBox = context.findRenderObject() as RenderBox;
     final size = renderBox.size;
@@ -69,11 +76,39 @@ class _SearchbarRegionState extends State<StandardSearchbarRegion> {
             suggestions: widget.suggestions!,
             borderRadius: widget.borderRadius,
             backgroundColor: widget.backgroundColor,
+            onSuggestionSelected: (s) {
+              widget.onSuggestionSelected(s);
+              unFocus();
+            },
+            onTapInside: (e) {
+              unfocus[0] = false;
+            },
+            onTapOutside: (e) {
+              unfocus[0] = true;
+              Future.delayed(const Duration(milliseconds: 100), () {
+                requestUnFocus(0);
+              });
+            },
           ),
         ),
       ),
     );
 
     overlay.insert(entry!);
+  }
+
+  void requestUnFocus(int n) {
+    if (unfocus[0] && unfocus[1]) {
+      unFocus();
+      unfocus[0] = false;
+      unfocus[1] = false;
+    }
+  }
+
+  void unFocus() {
+    widget.unfocus();
+    if (widget.suggestions == null) return;
+    if (!widget.isSearchBarFocused) return;
+    entry?.remove();
   }
 }
