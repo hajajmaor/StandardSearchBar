@@ -14,22 +14,19 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: const Text('Standard SearchBar Example'),
         ),
-        body: const Center(
-          child: StandardSearchBar(
-            width: 350,
-            backgroundColor: Color(0xFF35404D),
-            hintText: 'Search',
-            cursorColor: Colors.white,
-            hintStyle: TextStyle(color: Color(0xFF8d9399)),
-            startIconColor: Color(0xFF848B92),
-            textStyle: TextStyle(color: Colors.white),
-            shadow: [
-              BoxShadow(
-                color: Color.fromARGB(12, 255, 255, 255),
-                spreadRadius: 7,
-                blurRadius: 10,
-                offset: Offset(0, 3),
+        body: SizedBox(
+          width: double.infinity,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(height: 50),
+              StandardSearchBar(
+                width: 360,
+                suggestions: List.generate(100, (index) {
+                  return 'Suggestion ${index + 1}';
+                }),
               ),
+              const SizedBox(height: 200),
             ],
           ),
         ),
