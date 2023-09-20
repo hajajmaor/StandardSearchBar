@@ -42,7 +42,6 @@ class StandardSearchBar extends StatefulWidget {
     ],
     this.textStyle = const TextStyle(color: Colors.black),
     this.suggestions,
-    this.controller,
   });
 
   /// The width of the search bar. By default is the width of the parent (expanded).
@@ -142,72 +141,104 @@ class StandardSearchBar extends StatefulWidget {
   /// value. A list of String.
   final List<String>? suggestions;
 
-  /// The controller of the TextField. By default is null.
-  final TextEditingController? controller;
-
   @override
   State<StandardSearchBar> createState() => _StandardSearchBarState();
 }
 
 class _StandardSearchBarState extends State<StandardSearchBar> {
   bool isSearchBarFocused = false;
+  final TextEditingController controller = TextEditingController();
+  late List<String> suggestions;
+  bool rebuild = false;
+
+  @override
+  void initState() {
+    super.initState();
+    suggestions = widget.suggestions ?? [];
+  }
+
+  void updateSuggestions(String value) {
+    if (widget.suggestions == null) return;
+
+    if (value.isEmpty) {
+      setState(() => suggestions = widget.suggestions ?? []);
+      return;
+    }
+
+    // setState(() {
+    suggestions = widget.suggestions!
+        .where((element) => element.toLowerCase().contains(value.toLowerCase()))
+        .toList();
+    rebuild = true;
+    // });
+    print(value);
+    // showOverlay();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return StandardSearchbarRegion(
-      isSearchBarFocused: isSearchBarFocused,
-      suggestions: widget.suggestions,
-      focus: focus,
-      unfocus: unfocus,
-      borderRadius: widget.borderRadius,
-      backgroundColor: widget.backgroundColor,
-      child: Container(
-        width: widget.width,
-        decoration: BoxDecoration(
-          color: widget.backgroundColor,
-          borderRadius: isSearchBarFocused
-              ? BorderRadius.only(
-                  topLeft: Radius.circular(widget.borderRadius),
-                  topRight: Radius.circular(widget.borderRadius),
-                )
-              : BorderRadius.circular(widget.borderRadius),
-          boxShadow: widget.shadow,
-        ),
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: widget.horizontalPadding),
-          child: Row(
-            children: [
-              if (widget.showStartIcon != false)
-                StandardIcon(
-                  startIcon: widget.startIcon,
-                  startIconColor: widget.startIconColor,
-                  startIconSize: widget.startIconSize,
-                  startIconSplashColor: widget.startIconSplashColor,
-                  startIconPaddingRight: widget.startIconPaddingRight,
+    return Center(
+      child: StandardSearchbarRegion(
+        isSearchBarFocused: isSearchBarFocused,
+        suggestions: suggestions,
+        focus: focus,
+        unfocus: unfocus,
+        borderRadius: widget.borderRadius,
+        backgroundColor: widget.backgroundColor,
+        onSuggestionSelected: (value) {
+          controller.text = value;
+          widget.onSubmitted?.call(value);
+        },
+        rebuild: rebuild,
+        child: Container(
+          width: widget.width,
+          decoration: BoxDecoration(
+            color: widget.backgroundColor,
+            borderRadius: isSearchBarFocused
+                ? BorderRadius.only(
+                    topLeft: Radius.circular(widget.borderRadius),
+                    topRight: Radius.circular(widget.borderRadius),
+                  )
+                : BorderRadius.circular(widget.borderRadius),
+            boxShadow: widget.shadow,
+          ),
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: widget.horizontalPadding),
+            child: Row(
+              children: [
+                if (widget.showStartIcon != false)
+                  StandardIcon(
+                    startIcon: widget.startIcon,
+                    startIconColor: widget.startIconColor,
+                    startIconSize: widget.startIconSize,
+                    startIconSplashColor: widget.startIconSplashColor,
+                    startIconPaddingRight: widget.startIconPaddingRight,
+                  ),
+                Expanded(
+                  child: StandardTextField(
+                    showEndIcon: widget.showEndIcon,
+                    endIconPaddingLeft: widget.endIconPaddingLeft,
+                    hintText: widget.hintText,
+                    hintStyle: widget.hintStyle,
+                    cursorColor: widget.cursorColor,
+                    textStyle: widget.textStyle,
+                    controller: controller,
+                    onSubmitted: widget.onSubmitted,
+                    onChanged: widget.onChanged,
+                    horizontalPadding: widget.horizontalPadding,
+                    updateSuggestions: updateSuggestions,
+                  ),
                 ),
-              Expanded(
-                child: StandardTextField(
-                  showEndIcon: widget.showEndIcon,
-                  endIconPaddingLeft: widget.endIconPaddingLeft,
-                  hintText: widget.hintText,
-                  hintStyle: widget.hintStyle,
-                  cursorColor: widget.cursorColor,
-                  textStyle: widget.textStyle,
-                  controller: widget.controller,
-                  onSubmitted: widget.onSubmitted,
-                  onChanged: widget.onChanged,
-                  horizontalPadding: widget.horizontalPadding,
-                ),
-              ),
-              if (widget.showEndIcon != false)
-                StandardIcon(
-                  startIcon: widget.startIcon,
-                  startIconColor: widget.startIconColor,
-                  startIconSize: widget.startIconSize,
-                  startIconSplashColor: widget.startIconSplashColor,
-                  startIconPaddingRight: widget.startIconPaddingRight,
-                )
-            ],
+                if (widget.showEndIcon != false)
+                  StandardIcon(
+                    startIcon: widget.startIcon,
+                    startIconColor: widget.startIconColor,
+                    startIconSize: widget.startIconSize,
+                    startIconSplashColor: widget.startIconSplashColor,
+                    startIconPaddingRight: widget.startIconPaddingRight,
+                  )
+              ],
+            ),
           ),
         ),
       ),
