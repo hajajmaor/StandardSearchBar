@@ -165,14 +165,12 @@ class _StandardSearchBarState extends State<StandardSearchBar> {
       return;
     }
 
-    // setState(() {
-    suggestions = widget.suggestions!
-        .where((element) => element.toLowerCase().contains(value.toLowerCase()))
-        .toList();
-    rebuild = true;
-    // });
-    print(value);
-    // showOverlay();
+    setState(() {
+      suggestions = widget.suggestions!
+          .where((element) => element.toLowerCase().contains(value.toLowerCase()))
+          .toList();
+      rebuild = true;
+    });
   }
 
   @override
