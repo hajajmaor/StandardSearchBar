@@ -149,8 +149,6 @@ class _StandardSearchBarState extends State<StandardSearchBar> {
   bool isSearchBarFocused = false;
   final TextEditingController controller = TextEditingController();
   late List<String> suggestions;
-  bool rebuild = false;
-
   @override
   void initState() {
     super.initState();
@@ -169,7 +167,6 @@ class _StandardSearchBarState extends State<StandardSearchBar> {
       suggestions = widget.suggestions!
           .where((element) => element.toLowerCase().contains(value.toLowerCase()))
           .toList();
-      rebuild = true;
     });
   }
 
@@ -187,7 +184,6 @@ class _StandardSearchBarState extends State<StandardSearchBar> {
           controller.text = value;
           widget.onSubmitted?.call(value);
         },
-        rebuild: rebuild,
         child: Container(
           width: widget.width,
           decoration: BoxDecoration(

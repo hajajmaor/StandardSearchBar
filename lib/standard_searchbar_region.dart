@@ -12,7 +12,6 @@ class StandardSearchbarRegion extends StatefulWidget {
     required this.borderRadius,
     required this.backgroundColor,
     required this.onSuggestionSelected,
-    required this.rebuild,
     required this.child,
   });
 
@@ -23,7 +22,6 @@ class StandardSearchbarRegion extends StatefulWidget {
   final double borderRadius;
   final Color backgroundColor;
   final Function(String) onSuggestionSelected;
-  final bool rebuild;
   final Widget child;
 
   @override
