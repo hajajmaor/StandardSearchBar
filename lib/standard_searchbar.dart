@@ -1,6 +1,9 @@
 library standard_searchbar;
 
 import 'package:flutter/material.dart';
+import 'package:standard_searchbar/standard_icon.dart';
+import 'package:standard_searchbar/standard_searchbar_region.dart';
+import 'package:standard_searchbar/standard_text_field.dart';
 
 class StandardSearchBar extends StatefulWidget {
   const StandardSearchBar({
@@ -38,6 +41,8 @@ class StandardSearchBar extends StatefulWidget {
       ),
     ],
     this.textStyle = const TextStyle(color: Colors.black),
+    this.suggestions,
+    this.controller,
   });
 
   /// The width of the search bar. By default is the width of the parent (expanded).
@@ -133,153 +138,82 @@ class StandardSearchBar extends StatefulWidget {
   /// The text style of the TextField. By default the text color is black.
   final TextStyle textStyle;
 
+  /// The suggestions of the search bar. By default is null. It can be any
+  /// value. A list of String.
+  final List<String>? suggestions;
+
+  /// The controller of the TextField. By default is null.
+  final TextEditingController? controller;
+
   @override
   State<StandardSearchBar> createState() => _StandardSearchBarState();
 }
 
 class _StandardSearchBarState extends State<StandardSearchBar> {
-  OverlayEntry? entry;
-  final layerLink = LayerLink();
   bool isSearchBarFocused = false;
-
-  void toggleSearchbar() {
-    setState(() {
-      isSearchBarFocused = !isSearchBarFocused;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
-    return TapRegion(
-      onTapOutside: (_) {}, // Cancel
-      child: CompositedTransformTarget(
-        link: layerLink,
-        child: Container(
-          width: widget.width,
-          decoration: BoxDecoration(
-            color: widget.backgroundColor,
-            borderRadius: isSearchBarFocused
-                ? BorderRadius.only(
-                    topLeft: Radius.circular(widget.borderRadius),
-                    topRight: Radius.circular(widget.borderRadius))
-                : BorderRadius.circular(widget.borderRadius),
-            boxShadow: widget.shadow,
-          ),
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: widget.horizontalPadding),
-            child: Row(
-              children: [
-                if (widget.showStartIcon != false)
-                  Padding(
-                    padding: EdgeInsets.only(right: widget.startIconPaddingRight),
-                    child: ClipOval(
-                      child: Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          splashColor: widget.startIconSplashColor,
-                          onTap: widget.startIconOnTap,
-                          child: Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: Icon(
-                              widget.startIcon,
-                              color: widget.startIconColor,
-                              size: widget.startIconSize,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                Expanded(
-                  child: Padding(
-                    padding: widget.showEndIcon
-                        ? EdgeInsets.zero
-                        : EdgeInsets.only(right: widget.endIconPaddingLeft),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: widget.hintText,
-                        hintStyle: widget.hintStyle,
-                      ),
-                      cursorColor: widget.cursorColor,
-                      style: widget.textStyle,
-                      onSubmitted: widget.onSubmitted,
-                      onChanged: (value) {
-                        if (value.length == 1 && !isSearchBarFocused) {
-                          toggleSearchbar();
-                          showOverlay();
-                        }
-
-                        if (value.isEmpty) {
-                          toggleSearchbar();
-                          entry?.remove();
-                        }
-
-                        if (widget.onChanged != null) {
-                          widget.onChanged!(value);
-                        }
-                      },
-                    ),
-                  ),
+    return StandardSearchbarRegion(
+      isSearchBarFocused: isSearchBarFocused,
+      suggestions: widget.suggestions,
+      focus: focus,
+      unfocus: unfocus,
+      borderRadius: widget.borderRadius,
+      backgroundColor: widget.backgroundColor,
+      child: Container(
+        width: widget.width,
+        decoration: BoxDecoration(
+          color: widget.backgroundColor,
+          borderRadius: isSearchBarFocused
+              ? BorderRadius.only(
+                  topLeft: Radius.circular(widget.borderRadius),
+                  topRight: Radius.circular(widget.borderRadius),
+                )
+              : BorderRadius.circular(widget.borderRadius),
+          boxShadow: widget.shadow,
+        ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: widget.horizontalPadding),
+          child: Row(
+            children: [
+              if (widget.showStartIcon != false)
+                StandardIcon(
+                  startIcon: widget.startIcon,
+                  startIconColor: widget.startIconColor,
+                  startIconSize: widget.startIconSize,
+                  startIconSplashColor: widget.startIconSplashColor,
+                  startIconPaddingRight: widget.startIconPaddingRight,
                 ),
-                if (widget.showEndIcon != false)
-                  Padding(
-                    padding: EdgeInsets.only(left: widget.endIconPaddingLeft),
-                    child: ClipOval(
-                      child: Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          splashColor: widget.endIconSplashColor,
-                          onTap: widget.endIconOnTap,
-                          child: Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: Icon(
-                              widget.endIcon,
-                              color: widget.endIconColor,
-                              size: widget.endIconSize,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  void showOverlay() {
-    final overlay = Overlay.of(context);
-    final renderBox = context.findRenderObject() as RenderBox;
-    final size = renderBox.size;
-    final offset = renderBox.localToGlobal(Offset.zero);
-
-    entry = OverlayEntry(
-      builder: (context) => Positioned(
-        left: offset.dx,
-        top: offset.dy + size.height + 16,
-        width: size.width,
-        child: CompositedTransformFollower(
-          link: layerLink,
-          showWhenUnlinked: false,
-          offset: Offset(0, size.height),
-          child: Container(
-            height: 75,
-            decoration: BoxDecoration(
-              color: widget.backgroundColor,
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(widget.borderRadius),
-                bottomRight: Radius.circular(widget.borderRadius),
+              Expanded(
+                child: StandardTextField(
+                  showEndIcon: widget.showEndIcon,
+                  endIconPaddingLeft: widget.endIconPaddingLeft,
+                  hintText: widget.hintText,
+                  hintStyle: widget.hintStyle,
+                  cursorColor: widget.cursorColor,
+                  textStyle: widget.textStyle,
+                  controller: widget.controller,
+                  onSubmitted: widget.onSubmitted,
+                  onChanged: widget.onChanged,
+                  horizontalPadding: widget.horizontalPadding,
+                ),
               ),
-            ),
+              if (widget.showEndIcon != false)
+                StandardIcon(
+                  startIcon: widget.startIcon,
+                  startIconColor: widget.startIconColor,
+                  startIconSize: widget.startIconSize,
+                  startIconSplashColor: widget.startIconSplashColor,
+                  startIconPaddingRight: widget.startIconPaddingRight,
+                )
+            ],
           ),
         ),
       ),
     );
-
-    overlay.insert(entry!);
   }
+
+  void focus() => widget.suggestions != null ? setState(() => isSearchBarFocused = true) : null;
+  void unfocus() => widget.suggestions != null ? setState(() => isSearchBarFocused = false) : null;
 }
