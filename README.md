@@ -3,8 +3,14 @@
 A simple and very customizable search bar widget for Flutter.
 
 <table>
-  <tr><img src="https://raw.githubusercontent.com/ManelRosPuig/StandardSearchBar/main/images/StandardSearchBarExample1.gif"></tr>
-  <tr><img src="https://raw.githubusercontent.com/ManelRosPuig/StandardSearchBar/main/images/2.png"></tr>
+  <tr>
+    <th>Preview</th>
+    <th>Code</th>
+  </tr>
+  <tr>
+    <td><img src="https://raw.githubusercontent.com/ManelRosPuig/StandardSearchBar/main/images/Standard%20SearchBar%202.0.gif" width=650></td>
+    <td><img src="https://raw.githubusercontent.com/ManelRosPuig/StandardSearchBar/main/images/Standard%20SearchBar%202.0%20Code.png"></td>
+  </tr>
 </table>
 
 ## Features
@@ -21,7 +27,7 @@ Add the following line to your `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  standard_searchbar: ^1.0.0
+  standard_searchbar: ^2.0.0
 ```
 
 Then, run flutter pub get to install the package.
@@ -51,15 +57,16 @@ StandardSearchBar(
 
 ```dart
 StandardSearchBar(
-  width: MediaQuery.of(context).size.width * 0.9,
-  backgroundColor: const Color(0xFF35404D),
-  hintText: 'Search Packages',
-  cursorColor: Colors.white,
-  hintStyle: const TextStyle(color: Color(0xFF8d9399)),
-  startIconSize: 16,
-  startIconPaddingRight: 0,
-  startIconColor: const Color(0xFF848B92),
-  textStyle: const TextStyle(color: Colors.white),
+  width: 360,
+  suggestions: [
+    'apple',
+    'banana',
+    'melon',
+    'orange',
+    'pineapple',
+    'strawberry',
+    'watermelon'
+  ],
 ),
 ```
 
