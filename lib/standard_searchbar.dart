@@ -1,6 +1,7 @@
 library standard_searchbar;
 
 import 'package:flutter/material.dart';
+
 import 'package:standard_searchbar/standard_icon.dart';
 import 'package:standard_searchbar/standard_suggestions_box.dart';
 import 'package:standard_searchbar/standard_text_field.dart';
@@ -168,13 +169,57 @@ class _StandardSearchBarState extends State<StandardSearchBar> {
       return;
     }
 
-    suggestions = widget.suggestions!
-        .where((element) => element.toLowerCase().contains(value.toLowerCase()))
-        .toList();
+    suggestions = widget.suggestions!.where((element) => isSimilar(element, value)).toList();
+
+    suggestions = orderContains(suggestions!, value);
+
+    suggestions = orderStartsWith(suggestions!, value);
 
     setState(() {});
 
     updateOverlay();
+  }
+
+  bool isSimilar(String original, String searchValue) {
+    String originalLower = original.toLowerCase();
+    String searchValueLower = searchValue.toLowerCase();
+
+    if (originalLower.contains(searchValueLower)) return true;
+
+    int similarCharactersCount = 0;
+    for (var char in searchValueLower.runes) {
+      if (originalLower.runes.contains(char)) {
+        similarCharactersCount++;
+      }
+    }
+
+    return similarCharactersCount >= searchValueLower.length / 1.25; // 2
+  }
+
+  List<String> orderContains(List<String> suggestions, String value) {
+    suggestions.sort((a, b) {
+      if (a.contains(value) && !b.contains(value)) {
+        return -1;
+      } else if (!a.contains(value) && b.contains(value)) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+    return suggestions;
+  }
+
+  List<String> orderStartsWith(List<String> suggestions, String value) {
+    suggestions.sort((a, b) {
+      if (a.startsWith(value) && !b.startsWith(value)) {
+        return -1;
+      } else if (!a.startsWith(value) && b.startsWith(value)) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+    return suggestions;
   }
 
   @override
