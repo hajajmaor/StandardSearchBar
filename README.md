@@ -8,7 +8,7 @@ A simple and very customizable search bar widget for Flutter.
     <th>Code</th>
   </tr>
   <tr>
-    <td><img src="https://raw.githubusercontent.com/ManelRosPuig/StandardSearchBar/main/images/Standard%20SearchBar%202.0.gif" width=900></td>
+    <td><img src="https://raw.githubusercontent.com/ManelRosPuig/StandardSearchBar/main/images/Standard%20SearchBar%202.0.gif"></td>
     <td><img src="https://raw.githubusercontent.com/ManelRosPuig/StandardSearchBar/main/images/Standard%20SearchBar%202.0%20Code.png"></td>
   </tr>
 </table>
