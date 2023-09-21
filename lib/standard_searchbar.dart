@@ -2,7 +2,7 @@ library standard_searchbar;
 
 import 'package:flutter/material.dart';
 import 'package:standard_searchbar/standard_icon.dart';
-import 'package:standard_searchbar/standard_searchbar_region.dart';
+import 'package:standard_searchbar/standard_suggestions_box.dart';
 import 'package:standard_searchbar/standard_text_field.dart';
 
 class StandardSearchBar extends StatefulWidget {
@@ -148,11 +148,16 @@ class StandardSearchBar extends StatefulWidget {
 class _StandardSearchBarState extends State<StandardSearchBar> {
   bool isSearchBarFocused = false;
   final TextEditingController controller = TextEditingController();
-  late List<String> suggestions;
+  List<String>? suggestions;
+
+  OverlayEntry? entry;
+  final layerLink = LayerLink();
+  final unfocus = [false, false];
+
   @override
   void initState() {
     super.initState();
-    suggestions = widget.suggestions ?? [];
+    suggestions = widget.suggestions;
   }
 
   void updateSuggestions(String value) {
@@ -172,18 +177,20 @@ class _StandardSearchBarState extends State<StandardSearchBar> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: StandardSearchbarRegion(
-        isSearchBarFocused: isSearchBarFocused,
-        suggestions: suggestions,
-        focus: focus,
-        unfocus: unfocus,
-        borderRadius: widget.borderRadius,
-        backgroundColor: widget.backgroundColor,
-        onSuggestionSelected: (value) {
-          controller.text = value;
-          widget.onSubmitted?.call(value);
-        },
+    return TapRegion(
+      onTapInside: (e) {
+        if (suggestions == null) return;
+        if (isSearchBarFocused) return;
+        unfocus[1] = false;
+        focus();
+        showOverlay();
+      },
+      onTapOutside: (e) {
+        unfocus[1] = true;
+        requestUnFocus(1);
+      },
+      child: CompositedTransformTarget(
+        link: layerLink,
         child: Container(
           width: widget.width,
           decoration: BoxDecoration(
@@ -240,5 +247,61 @@ class _StandardSearchBarState extends State<StandardSearchBar> {
   }
 
   void focus() => widget.suggestions != null ? setState(() => isSearchBarFocused = true) : null;
-  void unfocus() => widget.suggestions != null ? setState(() => isSearchBarFocused = false) : null;
+
+  void showOverlay() {
+    if (widget.suggestions == null) return;
+
+    final overlay = Overlay.of(context);
+    final renderBox = context.findRenderObject() as RenderBox;
+    final size = renderBox.size;
+    final offset = renderBox.localToGlobal(Offset.zero);
+    entry = OverlayEntry(
+      builder: (context) => Positioned(
+        left: offset.dx,
+        top: offset.dy + size.height + 16,
+        width: size.width,
+        child: CompositedTransformFollower(
+          link: layerLink,
+          showWhenUnlinked: false,
+          offset: Offset(0, size.height),
+          child: StandardSuggestionsBox(
+            suggestions: widget.suggestions!,
+            borderRadius: widget.borderRadius,
+            backgroundColor: widget.backgroundColor,
+            onSuggestionSelected: (s) {
+              controller.text = s;
+              widget.onSubmitted?.call(s);
+              unFocus();
+            },
+            onTapInside: (e) {
+              unfocus[0] = false;
+            },
+            onTapOutside: (e) {
+              unfocus[0] = true;
+              Future.delayed(const Duration(milliseconds: 100), () {
+                requestUnFocus(0);
+              });
+            },
+          ),
+        ),
+      ),
+    );
+
+    overlay.insert(entry!);
+  }
+
+  void requestUnFocus(int n) {
+    if (unfocus[0] && unfocus[1]) {
+      unFocus();
+      unfocus[0] = false;
+      unfocus[1] = false;
+    }
+  }
+
+  void unFocus() {
+    if (widget.suggestions == null) return;
+    if (!isSearchBarFocused) return;
+    setState(() => isSearchBarFocused = false);
+    entry?.remove();
+  }
 }
