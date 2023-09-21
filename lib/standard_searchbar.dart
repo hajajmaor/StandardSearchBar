@@ -168,11 +168,13 @@ class _StandardSearchBarState extends State<StandardSearchBar> {
       return;
     }
 
-    setState(() {
-      suggestions = widget.suggestions!
-          .where((element) => element.toLowerCase().contains(value.toLowerCase()))
-          .toList();
-    });
+    suggestions = widget.suggestions!
+        .where((element) => element.toLowerCase().contains(value.toLowerCase()))
+        .toList();
+
+    setState(() {});
+
+    updateOverlay();
   }
 
   @override
@@ -265,7 +267,7 @@ class _StandardSearchBarState extends State<StandardSearchBar> {
           showWhenUnlinked: false,
           offset: Offset(0, size.height),
           child: StandardSuggestionsBox(
-            suggestions: widget.suggestions!,
+            suggestions: suggestions!,
             borderRadius: widget.borderRadius,
             backgroundColor: widget.backgroundColor,
             onSuggestionSelected: (s) {
@@ -288,6 +290,12 @@ class _StandardSearchBarState extends State<StandardSearchBar> {
     );
 
     overlay.insert(entry!);
+  }
+
+  void updateOverlay() {
+    if (widget.suggestions == null) return;
+    if (!isSearchBarFocused) return;
+    entry?.markNeedsBuild();
   }
 
   void requestUnFocus(int n) {

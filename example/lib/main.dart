@@ -14,19 +14,44 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: const Text('Standard SearchBar Example'),
         ),
-        body: SizedBox(
+        body: const SizedBox(
           width: double.infinity,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(height: 50),
+              SizedBox(height: 50),
               StandardSearchBar(
                 width: 360,
-                suggestions: List.generate(100, (index) {
-                  return 'Suggestion ${index + 1}';
-                }),
+                suggestions: [
+                  'apple',
+                  'banana',
+                  'cherry',
+                  'durian',
+                  'elderberry',
+                  'fig',
+                  'grape',
+                  'honeydew',
+                  'imbe',
+                  'jackfruit',
+                  'kiwi',
+                  'lemon',
+                  'mango',
+                  'nectarine',
+                  'orange',
+                  'papaya',
+                  'quince',
+                  'raspberry',
+                  'strawberry',
+                  'tangerine',
+                  'ugli',
+                  'vanilla',
+                  'watermelon',
+                  'xigua',
+                  'yuzu',
+                  'zucchini',
+                ],
               ),
-              const SizedBox(height: 200),
+              SizedBox(height: 200),
             ],
           ),
         ),
