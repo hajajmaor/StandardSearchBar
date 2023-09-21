@@ -9,14 +9,49 @@ class StandardSuggestionsBox extends StatelessWidget {
     required this.onSuggestionSelected,
     required this.onTapInside,
     required this.onTapOutside,
+    required this.boxHeight,
+    required this.boxPadding,
+    required this.suggestionTextStyle,
   });
 
+  /// List of suggestions to display. The `StandardSearchBar` class will pass
+  /// the filtered and ordered suggestions to this class.
   final List<String> suggestions;
+
+  /// The radius of the bottom corners of the suggestions box. This param is
+  /// the same as the one in the `StandardSearchBar` class.
   final double borderRadius;
+
+  /// The background color of the suggestions box. This param is the same as
+  /// the one in the `StandardSearchBar` class.
   final Color backgroundColor;
+
+  /// Callback function when a suggestion is selected. Basically, it takes the
+  /// selected suggestion and put it in the text field. Then, it calls the
+  /// onSubmitted callback function and unfocus the text field.
   final Function(String) onSuggestionSelected;
+
+  /// Callback function when the suggestions box is tapped inside. Used to detect
+  /// when the suggestions box is tapped inside so that the suggestions box can
+  /// be closed. Same as the onTapOutside callback function.
   final Function(PointerEvent) onTapInside;
+
+  /// Callback function when the suggestions box is tapped outside. Used to detect
+  /// when the suggestions box is tapped outside so that the suggestions box can
+  /// be closed. Same as the onTapInside callback function.
   final Function(PointerEvent) onTapOutside;
+
+  /// The height of the suggestions box. This param is the same as the one in
+  /// the `StandardSearchBar` class.
+  final double boxHeight;
+
+  /// The padding of the suggestions box list tiles. This param is the same as
+  /// the one in the `StandardSearchBar` class.
+  final EdgeInsetsGeometry boxPadding;
+
+  /// The text style of the suggestions. This param is the same as the one in
+  /// the `StandardSearchBar` class.
+  final TextStyle suggestionTextStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +59,7 @@ class StandardSuggestionsBox extends StatelessWidget {
       onTapOutside: onTapOutside,
       onTapInside: onTapInside,
       child: Container(
-        height: 175,
+        height: boxHeight,
         decoration: BoxDecoration(
           color: backgroundColor,
           borderRadius: BorderRadius.only(
@@ -33,7 +68,7 @@ class StandardSuggestionsBox extends StatelessWidget {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.only(bottom: 18.0),
+          padding: const EdgeInsets.only(bottom: 20),
           child: Material(
             borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(borderRadius),
@@ -44,19 +79,12 @@ class StandardSuggestionsBox extends StatelessWidget {
               itemCount: suggestions.length,
               itemBuilder: (context, index) {
                 return InkWell(
-                  onTap: () {
-                    onSuggestionSelected(suggestions[index]);
-                  },
+                  onTap: () => onSuggestionSelected(suggestions[index]),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 12,
-                    ),
+                    padding: boxPadding,
                     child: Text(
                       suggestions[index],
-                      style: const TextStyle(
-                        fontSize: 16,
-                      ),
+                      style: suggestionTextStyle,
                     ),
                   ),
                 );

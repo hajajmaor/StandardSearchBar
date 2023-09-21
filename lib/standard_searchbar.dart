@@ -43,6 +43,11 @@ class StandardSearchBar extends StatefulWidget {
     ],
     this.textStyle = const TextStyle(color: Colors.black),
     this.suggestions,
+    this.suggestionsBoxHeight = 175,
+    this.suggestionsBoxPadding =
+        const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+    this.suggestionTextStyle = const TextStyle(fontSize: 16),
+    this.maxSuggestions = 10,
   });
 
   /// The width of the search bar. By default is the width of the parent (expanded).
@@ -142,6 +147,20 @@ class StandardSearchBar extends StatefulWidget {
   /// value. A list of String.
   final List<String>? suggestions;
 
+  /// The height of the suggestions box. By default is 175.
+  final double? suggestionsBoxHeight;
+
+  /// The padding of the suggestions box. By default is symetric horizontal 16
+  /// and vertical 12.
+  final EdgeInsetsGeometry? suggestionsBoxPadding;
+
+  /// The text style of the suggestions. By default the text color is fontsize is 16.
+  final TextStyle? suggestionTextStyle;
+
+  /// The max number of suggestions to show. If null, all the suggestions will
+  /// be shown. By default is 10.
+  final int? maxSuggestions;
+
   @override
   State<StandardSearchBar> createState() => _StandardSearchBarState();
 }
@@ -162,6 +181,7 @@ class _StandardSearchBarState extends State<StandardSearchBar> {
   }
 
   void updateSuggestions(String value) {
+    // Null safety
     if (widget.suggestions == null) return;
 
     if (value.isEmpty) {
@@ -169,13 +189,14 @@ class _StandardSearchBarState extends State<StandardSearchBar> {
       return;
     }
 
-    suggestions = widget.suggestions!.where((element) => isSimilar(element, value)).toList();
-
-    suggestions = orderContains(suggestions!, value);
-
-    suggestions = orderStartsWith(suggestions!, value);
-
-    setState(() {});
+    setState(() {
+      suggestions = widget.suggestions!
+          .where((element) => isSimilar(element, value))
+          .toList();
+      suggestions = orderContains(suggestions!, value);
+      suggestions = orderStartsWith(suggestions!, value);
+      suggestions = removeDuplicates(suggestions!);
+    });
 
     updateOverlay();
   }
@@ -222,6 +243,10 @@ class _StandardSearchBarState extends State<StandardSearchBar> {
     return suggestions;
   }
 
+  List<String> removeDuplicates(List<String> suggestions) {
+    return suggestions.toSet().toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return TapRegion(
@@ -256,11 +281,12 @@ class _StandardSearchBarState extends State<StandardSearchBar> {
               children: [
                 if (widget.showStartIcon != false)
                   StandardIcon(
-                    startIcon: widget.startIcon,
-                    startIconColor: widget.startIconColor,
-                    startIconSize: widget.startIconSize,
-                    startIconSplashColor: widget.startIconSplashColor,
-                    startIconPaddingRight: widget.startIconPaddingRight,
+                    icon: widget.startIcon,
+                    iconColor: widget.startIconColor,
+                    iconSize: widget.startIconSize,
+                    iconSplashColor: widget.startIconSplashColor,
+                    iconPaddingRight: widget.startIconPaddingRight,
+                    iconOnTap: () {},
                   ),
                 Expanded(
                   child: StandardTextField(
@@ -279,11 +305,12 @@ class _StandardSearchBarState extends State<StandardSearchBar> {
                 ),
                 if (widget.showEndIcon != false)
                   StandardIcon(
-                    startIcon: widget.startIcon,
-                    startIconColor: widget.startIconColor,
-                    startIconSize: widget.startIconSize,
-                    startIconSplashColor: widget.startIconSplashColor,
-                    startIconPaddingRight: widget.startIconPaddingRight,
+                    icon: widget.endIcon,
+                    iconColor: widget.endIconColor,
+                    iconSize: widget.endIconSize,
+                    iconSplashColor: widget.endIconSplashColor,
+                    iconPaddingLeft: widget.endIconPaddingLeft,
+                    iconOnTap: () {},
                   )
               ],
             ),
@@ -292,8 +319,6 @@ class _StandardSearchBarState extends State<StandardSearchBar> {
       ),
     );
   }
-
-  void focus() => widget.suggestions != null ? setState(() => isSearchBarFocused = true) : null;
 
   void showOverlay() {
     if (widget.suggestions == null) return;
@@ -312,9 +337,14 @@ class _StandardSearchBarState extends State<StandardSearchBar> {
           showWhenUnlinked: false,
           offset: Offset(0, size.height),
           child: StandardSuggestionsBox(
-            suggestions: suggestions!,
+            suggestions: suggestions!
+                .take(widget.maxSuggestions ?? suggestions!.length)
+                .toList(),
             borderRadius: widget.borderRadius,
             backgroundColor: widget.backgroundColor,
+            boxHeight: widget.suggestionsBoxHeight!,
+            boxPadding: widget.suggestionsBoxPadding!,
+            suggestionTextStyle: widget.suggestionTextStyle!,
             onSuggestionSelected: (s) {
               controller.text = s;
               widget.onSubmitted?.call(s);
@@ -325,9 +355,8 @@ class _StandardSearchBarState extends State<StandardSearchBar> {
             },
             onTapOutside: (e) {
               unfocus[0] = true;
-              Future.delayed(const Duration(milliseconds: 100), () {
-                requestUnFocus(0);
-              });
+              Future.delayed(
+                  const Duration(milliseconds: 100), () => requestUnFocus(0));
             },
           ),
         ),
@@ -349,6 +378,11 @@ class _StandardSearchBarState extends State<StandardSearchBar> {
       unfocus[0] = false;
       unfocus[1] = false;
     }
+  }
+
+  void focus() {
+    if (widget.suggestions == null) return;
+    setState(() => isSearchBarFocused = true);
   }
 
   void unFocus() {
