@@ -68,7 +68,7 @@ class StandardSuggestionsBox extends StatelessWidget {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.only(bottom: 20),
+          padding: const EdgeInsets.only(bottom: 22),
           child: Material(
             borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(borderRadius),

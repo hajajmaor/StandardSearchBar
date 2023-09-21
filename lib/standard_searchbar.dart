@@ -44,7 +44,7 @@ class StandardSearchBar extends StatefulWidget {
     this.textStyle = const TextStyle(color: Colors.black),
     this.suggestions,
     this.suggestionsBoxHeight = 175,
-    this.suggestionsBoxPadding = const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+    this.suggestionsBoxPadding = const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
     this.suggestionTextStyle = const TextStyle(fontSize: 16),
     this.maxSuggestions = 10,
   });

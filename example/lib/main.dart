@@ -22,14 +22,15 @@ class MyApp extends StatelessWidget {
               SizedBox(height: 50),
               StandardSearchBar(
                 width: 360,
-                // suggestions: [
-                //   'apple',
-                //   'banana',
-                //   'melon',
-                //   'orange',
-                //   'pineapple',
-                //   'strawberry',
-                // ],
+                suggestions: [
+                  'apple',
+                  'banana',
+                  'melon',
+                  'orange',
+                  'pineapple',
+                  'strawberry',
+                  'watermelon'
+                ],
               ),
               SizedBox(height: 200),
             ],
