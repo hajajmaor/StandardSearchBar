@@ -36,8 +36,7 @@ class StandardIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(
-          left: iconPaddingLeft ?? 0, right: iconPaddingRight ?? 0),
+      padding: EdgeInsets.only(left: iconPaddingLeft ?? 0, right: iconPaddingRight ?? 0),
       child: ClipOval(
         child: Material(
           color: Colors.transparent,

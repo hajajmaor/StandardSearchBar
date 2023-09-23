@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:standard_searchbar/new/standard_search_bar.dart';
+import 'package:standard_searchbar/new/standard_suggestions.dart';
 import 'package:standard_searchbar/new/standard_search_controller.dart';
 
 /// If there is no StandardSearchController passed in the constructor of
@@ -10,20 +11,30 @@ class StandardSearchAnchor extends StatefulWidget {
     super.key,
     this.controller,
     required this.searchBar,
+    required this.suggestions,
   });
 
+  static late StandardSearchAnchorState state;
+
   final StandardSearchController? controller;
+
   final StandardSearchBar searchBar;
+  final StandardSuggestions suggestions;
 
   @override
-  State<StandardSearchAnchor> createState() => StandardSearchAnchorState();
+  // ignore: no_logic_in_create_state
+  State<StandardSearchAnchor> createState() {
+    state = StandardSearchAnchorState();
+    return state;
+  }
 }
 
 class StandardSearchAnchorState extends State<StandardSearchAnchor> {
   late final StandardSearchController controller;
-  final unfocus = [false, false];
   final layerLink = LayerLink();
   OverlayEntry? entry;
+
+  bool get isOpen => entry != null;
 
   @override
   void initState() {
@@ -34,26 +45,25 @@ class StandardSearchAnchorState extends State<StandardSearchAnchor> {
       controller = StandardSearchController();
     }
     controller.anchor = this;
+    StandardSuggestions.controller = controller;
   }
 
   @override
   Widget build(BuildContext context) {
     return TapRegion(
       onTapInside: (e) {
+        StandardSearchController.unfocus[1] = false;
         controller.open();
       },
       onTapOutside: (e) {
-        controller.close();
+        StandardSearchController.unfocus[1] = true;
+        controller.requestClose();
       },
       child: CompositedTransformTarget(
         link: layerLink,
         child: widget.searchBar,
       ),
     );
-  }
-
-  void clear() {
-    controller.clear();
   }
 
   void open() {
@@ -69,10 +79,7 @@ class StandardSearchAnchorState extends State<StandardSearchAnchor> {
           link: layerLink,
           showWhenUnlinked: false,
           offset: Offset(0, renderBox.size.height),
-          child: Container(
-            height: 200,
-            color: Colors.red,
-          ),
+          child: widget.suggestions,
         ),
       );
     });
@@ -84,5 +91,9 @@ class StandardSearchAnchorState extends State<StandardSearchAnchor> {
       entry!.remove();
       entry = null;
     }
+  }
+
+  void clear() {
+    controller.clear();
   }
 }
