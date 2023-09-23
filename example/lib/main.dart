@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:standard_searchbar/new/standard_search_anchor.dart';
 import 'package:standard_searchbar/new/standard_search_bar.dart';
+import 'package:standard_searchbar/new/standard_suggestion.dart';
+import 'package:standard_searchbar/new/standard_suggestions.dart';
 
 // import 'package:standard_searchbar/standard_searchbar.dart';
 
@@ -19,10 +21,25 @@ class MyApp extends StatelessWidget {
         ),
         body: const SizedBox(
           width: double.infinity,
-          child: Center(
-            child: StandardSearchAnchor(
-              searchBar: StandardSearchBar(),
-            ),
+          child: Column(
+            children: [
+              SizedBox(height: 100),
+              SizedBox(
+                width: 360,
+                child: StandardSearchAnchor(
+                  searchBar: StandardSearchBar(
+                    bgColor: Colors.red,
+                  ),
+                  suggestions: StandardSuggestions(
+                    suggestions: [
+                      StandardSuggestion(text: 'Suggestion 1'),
+                      StandardSuggestion(text: 'Suggestion 2'),
+                      StandardSuggestion(text: 'Suggestion 3'),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
         // backgroundColor: Colors.black12,
