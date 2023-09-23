@@ -245,7 +245,6 @@ class _StandardSearchBarState extends State<StandardSearchBar> {
 
   @override
   Widget build(BuildContext context) {
-    SearchBar();
     return TapRegion(
       onTapInside: (e) {
         if (suggestions == null) return;
