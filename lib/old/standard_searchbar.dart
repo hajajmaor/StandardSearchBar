@@ -352,9 +352,9 @@ class _StandardSearchBarState extends State<StandardSearchBar> {
             boxHeight: widget.suggestionsBoxHeight!,
             boxPadding: widget.suggestionsBoxPadding!,
             suggestionTextStyle: widget.suggestionTextStyle!,
-            hoverColor: widget.suggestionHoverColor!,
-            highlightColor: widget.suggestionHighlightColor!,
-            decoration: widget.suggestionDecoration!,
+            hoverColor: widget.suggestionHoverColor,
+            highlightColor: widget.suggestionHighlightColor,
+            decoration: widget.suggestionDecoration,
             onSuggestionSelected: (s) {
               controller.text = s;
               widget.onSubmitted?.call(s);
