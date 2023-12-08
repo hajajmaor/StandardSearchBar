@@ -14,6 +14,7 @@ class StandardSuggestionsBox extends StatelessWidget {
     required this.suggestionTextStyle,
     this.hoverColor,
     this.highlightColor,
+    this.decoration,
   });
 
   /// List of suggestions to display. The `StandardSearchBar` class will pass
@@ -63,6 +64,10 @@ class StandardSuggestionsBox extends StatelessWidget {
   /// the `StandardSearchBar` class.
   final Color? highlightColor;
 
+  /// The decoration of the suggestions box. This param is the same as the one in
+  /// the `StandardSearchBar` class.
+  final Decoration? decoration;
+
   @override
   Widget build(BuildContext context) {
     return TapRegion(
@@ -93,6 +98,7 @@ class StandardSuggestionsBox extends StatelessWidget {
                   highlightColor: highlightColor ?? hoverColor,
                   onTap: () => onSuggestionSelected(suggestions[index]),
                   child: Container(
+                    decoration: decoration,
                     padding: boxPadding,
                     child: Text(
                       suggestions[index],

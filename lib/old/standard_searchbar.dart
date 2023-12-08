@@ -48,6 +48,7 @@ class StandardSearchBar extends StatefulWidget {
     this.maxSuggestions = 10,
     this.suggestionHoverColor,
     this.suggestionHighlightColor,
+    this.suggestionDecoration,
   });
 
   /// The width of the search bar. By default is the width of the parent (expanded).
@@ -166,6 +167,9 @@ class StandardSearchBar extends StatefulWidget {
 
   /// The color of the suggestions when highlighted. By default is opaque black.
   final Color? suggestionHighlightColor;
+
+  /// The decoration of the suggestions. By default is null.
+  final Decoration? suggestionDecoration;
 
   @override
   State<StandardSearchBar> createState() => _StandardSearchBarState();
@@ -349,6 +353,7 @@ class _StandardSearchBarState extends State<StandardSearchBar> {
             suggestionTextStyle: widget.suggestionTextStyle!,
             hoverColor: widget.suggestionHoverColor!,
             highlightColor: widget.suggestionHighlightColor!,
+            decoration: widget.suggestionDecoration!,
             onSuggestionSelected: (s) {
               controller.text = s;
               widget.onSubmitted?.call(s);
