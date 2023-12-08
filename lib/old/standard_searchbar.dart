@@ -196,6 +196,7 @@ class _StandardSearchBarState extends State<StandardSearchBar> {
 
     if (value.isEmpty) {
       setState(() => suggestions = widget.suggestions ?? []);
+      updateOverlay();
       return;
     }
 
