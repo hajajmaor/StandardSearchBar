@@ -43,7 +43,8 @@ class StandardSearchBar extends StatefulWidget {
     this.textStyle = const TextStyle(color: Colors.black),
     this.suggestions,
     this.suggestionsBoxHeight = 175,
-    this.suggestionsBoxPadding = const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+    this.suggestionsBoxPadding =
+        const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
     this.suggestionTextStyle = const TextStyle(fontSize: 16),
     this.maxSuggestions = 10,
     this.suggestionHoverColor,
@@ -201,7 +202,9 @@ class _StandardSearchBarState extends State<StandardSearchBar> {
     }
 
     setState(() {
-      suggestions = widget.suggestions!.where((element) => isSimilar(element, value)).toList();
+      suggestions = widget.suggestions!
+          .where((element) => isSimilar(element, value))
+          .toList();
       suggestions = orderContains(suggestions!, value);
       suggestions = orderStartsWith(suggestions!, value);
       suggestions = removeDuplicates(suggestions!);
@@ -346,7 +349,9 @@ class _StandardSearchBarState extends State<StandardSearchBar> {
           showWhenUnlinked: false,
           offset: Offset(0, size.height),
           child: StandardSuggestionsBox(
-            suggestions: suggestions!.take(widget.maxSuggestions ?? suggestions!.length).toList(),
+            suggestions: suggestions!
+                .take(widget.maxSuggestions ?? suggestions!.length)
+                .toList(),
             borderRadius: widget.borderRadius,
             backgroundColor: widget.backgroundColor,
             boxHeight: widget.suggestionsBoxHeight!,
@@ -365,7 +370,8 @@ class _StandardSearchBarState extends State<StandardSearchBar> {
             },
             onTapOutside: (e) {
               unfocus[0] = true;
-              Future.delayed(const Duration(milliseconds: 100), () => requestUnFocus(0));
+              Future.delayed(
+                  const Duration(milliseconds: 100), () => requestUnFocus(0));
             },
           ),
         ),
@@ -399,5 +405,11 @@ class _StandardSearchBarState extends State<StandardSearchBar> {
     if (!isSearchBarFocused) return;
     setState(() => isSearchBarFocused = false);
     entry?.remove();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 }

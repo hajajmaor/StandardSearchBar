@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-
 import 'package:standard_searchbar/new/standard_search_bar.dart';
-import 'package:standard_searchbar/new/standard_suggestions.dart';
 import 'package:standard_searchbar/new/standard_search_controller.dart';
+import 'package:standard_searchbar/new/standard_suggestions.dart';
 
 /// If there is no StandardSearchController passed in the constructor of
 /// StandardSearchBar, then a default one will be created.
@@ -95,5 +94,11 @@ class StandardSearchAnchorState extends State<StandardSearchAnchor> {
 
   void clear() {
     controller.clear();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 }
